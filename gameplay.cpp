@@ -23,17 +23,26 @@ class poker
 	void reset_deck();
 	string deal_card(); 
 	void get_hand();
+	void show_hand();
 	
 	
 };
 
+void poker::show_hand()
+{
+	cout<<hand[0]<<"\n"<<hand[1]<<"\n"; 
+}
 
 void poker:: play()
 {
-	char move; 
+	string move; 
 	
-	while(CashinAmount>0 || move=!"x")
+	while(CashinAmount>0)
 	{
+		reset_deck();
+		get_hand();
+		show_hand();
+		
 		
 		
 	}
@@ -104,7 +113,7 @@ void poker::reset_deck(){
 
 poker::poker()
 {
-	 cout<<"Blinds : 50 \n";
+	 cout<<"b: bet, c: check, f: fold\nBlinds : 50 \n";
      cout<<"Cash in Chips: ";
      cin>> CashinAmount; 
      
