@@ -11,6 +11,8 @@ class poker
 	public: 
 	const int blind = 50; 
 	int CashinAmount;
+	int money;
+	int pot;
 	
 	
 	std::vector<string> deck;
@@ -25,8 +27,45 @@ class poker
 	void get_hand();
 	void show_hand();
 	
+	void bet();
+	void check();
+	void fold(); 
 	
 };
+
+void poker::bet()
+{
+	int amount;
+	cout<<"Enter Bet Amount \n-:";
+	cin>> amount; 
+	int enoughmoney=1;
+	
+	while(enoughmoney)
+	{ 
+		if(amount>money)
+		{
+		cout<<"Not Enough Money\nEnter Bet Amount \n-:";
+			cin>>amount; 
+		 }
+		 else{
+		 	enoughmoney=0;
+		 }
+	 } 
+	 
+	 money=money-amount;
+	 pot=pot+amount;
+	
+}
+
+void poker::fold()
+{
+	
+}
+
+void poker::check()
+{
+	
+}
 
 void poker::show_hand()
 {
@@ -37,15 +76,53 @@ void poker:: play()
 {
 	string move; 
 	
-	while(CashinAmount>0)
+	while(money>0)
 	{
+		
+		
+		pot=0; 
+		
+		cout<<money<<"\n"; 
+		
 		reset_deck();
 		get_hand();
 		show_hand();
+		cout<<"-50 blinds -: ";
+		
+		pot = 50;
+		money=money-50;
+		cout<<money<<"\n-:"; 
+		
+		
+		cin>> move;
+		
+		if(move== "b")
+		{
+			bet();
+		}
+		else if(move=="f")
+		{
+			
+		}
+		else if(move=="c")
+		{
+			check();
+		}
+		else if(move=="x")	
+		{
+			break;
+		}
+		else
+		{
+			cout<<"unclear input-automatic fold\n";
+		}
+		
 		
 		
 		
 	}
+	
+	cout<<"chips: "<<money; 
 	
 }
 
@@ -113,10 +190,10 @@ void poker::reset_deck(){
 
 poker::poker()
 {
-	 cout<<"b: bet, c: check, f: fold\nBlinds : 50 \n";
+	 cout<<"b: bet, c: check, f: fold, x:exit\nBlinds : 50 \n";
      cout<<"Cash in Chips: ";
      cin>> CashinAmount; 
-     
+     money=CashinAmount;
      play();
 	 
 }
