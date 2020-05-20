@@ -66,6 +66,7 @@ class poker
 	void get_hand();
 	void get_o_hand(); 
 	void show_hand();
+	void show_ohand(); 
 	
 	void bet();
 	 
@@ -82,11 +83,16 @@ class poker
 	
 };  
 
+void poker:: show_ohand()
+{
+	
+	cout<<"\nD["<<ohand[0]<<"]\n";
+}
 
 void poker::bet()
 {
 	int amount;
-	cout<<"Enter Bet Amount \n:";
+	cout<<"Enter Bet Amount $\n:";
 	cin>> amount; 
 	int enoughmoney=1;
 	
@@ -94,7 +100,7 @@ void poker::bet()
 	{ 
 		if(amount>money)
 		{
-		cout<<"Not Enough Money\nEnter Bet Amount \n:";
+		cout<<"Not Enough Money\nEnter Bet Amount $\n:";
 			cin>>amount; 
 		 }
 		 else{
@@ -102,6 +108,7 @@ void poker::bet()
 		 }
 	 } 
 	 
+	 bet_amount=amount; 
 	 money=money-amount;
 	 pot=pot+amount;
 	
@@ -112,28 +119,42 @@ void poker::bet()
 
 void poker::show_hand()
 {
+	int size;
+	size=hand.size(); 
+	
 	cout<<"\nH[";
-	cout<<hand[0]<<" "<<hand[1]<<"]\n"; 
+	
+	for(int i=0; i<size; i++) 
+	{
+		
+	   cout<<hand[i]<<" ";
+    }
+    
+    cout<<"]\n"; 
 }
+
+    
 
 
 void poker:: get_score(vector<string> h) 
 {
 	int s;
-	s= hand.size();
+
 	string card; 
 	int value=0; 
     char v; 
-    bool ace=false; 
     bool doubled =false; 
     char m; 
 
 stand=false; 
 
  while(!stand)
- {
+ { 
+ 	s= hand.size();
+ 	value=0;
 	for(int i=0; i<s; i++)
 	{
+		
 		card=hand[i];
 		v=card.at(0); 
 		
@@ -184,7 +205,7 @@ stand=false;
 			
 			else{
 				
-			    ace=true; 
+			    value+=11; 
 			} 
 		}
 	} 
@@ -192,9 +213,14 @@ stand=false;
 	if(value>21)
 	{
 		bust=true; 
-		cout<<"\nBUST"; 
+		cout<<"\nScore: "<<value<<" BUST\n"; 
+		stand=true;
 		break;
 	}
+	
+	cout<<"POT: $"<<pot<<"\n"; 
+	cout<<"\nValue: "<<value<<"\n"; 
+    bet(); 
 	
 	if(doubled)
 	{
@@ -202,7 +228,7 @@ stand=false;
 		stand=true; 
 	}
 		
-	cout<<value<<"\n d:done \n h: hit, d: double down\n s: split"; 
+	cout<<"\n d:done \n h: hit\n b: double down\n s: split\n:"; 
 	cin>>m; 
 	
 	if(m=='d')
@@ -214,9 +240,10 @@ stand=false;
 	else if(m=='h')
 	{
 		get_hand(); 
+		show_hand(); 
 	}
 	
-	else if(m=='d')
+	else if(m=='b')
 	{
 		pot=pot+bet_amount; 
 		bet_amount=bet_amount*2; 
@@ -230,6 +257,7 @@ stand=false;
 	else if(m=='s')
 	{
 		
+		cout<<"\nsplit not yet functional";
 		
 	}
 	
@@ -246,7 +274,117 @@ stand=false;
 
 void poker:: get_oscore(vector<string> h)
 {
+	int s;
 	
+	string card; 
+	int value=0; 
+    char v; 
+    bool ace=false; 
+    bool doubled =false; 
+    char m; 
+
+stand=false; 
+
+ while(!stand)
+ {
+ 	s= ohand.size();
+ 	value=0;
+ 	cout<<"\nD[";
+	for(int i=0; i<s; i++)
+	{
+		cout<<ohand[i]<<" "; 
+		
+		card=ohand[i];
+		v=card.at(0); 
+		
+		if(v=='2')
+		{
+			value+=2; 
+		}
+		
+		else if (v=='3') 
+		{
+			value+=3;
+		}
+		else if(v=='4') 
+		{
+			value+=4;
+		}
+		else if(v=='5')
+		{
+			value+=5; 
+		}
+		else if(v=='6')
+		{
+			value+=6; 
+		}
+		else if(v=='7')
+		{
+			value+=7; 
+		}
+		else if(v=='8')
+		{
+			value+=8; 
+		}
+		else if(v=='9')
+		{
+			value+=9; 
+		}
+		else if(v=='t' || v=='j' || v=='q' || v=='k') 
+		{
+			value+=10; 
+		}
+		
+		else if(v=='a')
+		{
+			if(value+11 > 21)
+			{
+				value+=1; 
+			}
+			
+			else{
+				
+			    value+=11; 
+			} 
+		}
+		
+	cout<<"]\n"; 
+	} 
+	
+	if(value>21)
+	{
+		cout<<"Dealer Bust\n"; 
+		
+		obust=true; 
+		stand=true; 
+		break;
+	}
+	
+	if(doubled)
+	{
+		oscore=value; 
+		stand=true; 
+	}
+		
+	if(value>17)
+	{
+		cout<<"Dealer is Done\n"; 
+		stand=true;
+		oscore=value; 
+	}
+	
+	else if(value<17)
+	{
+		cout<<"Dealer Hit\n"; 
+		get_o_hand(); 
+		show_ohand(); 
+	}
+		
+		
+		
+	} 
+	
+
 }
 
 
@@ -263,9 +401,11 @@ void poker:: play()
 		cout<<"\nPlay Again? Y N \n "; 
 		cin>> gameplay; 
 		
-		if(gameplay == 'Y')
+		if(gameplay == 'Y'|| gameplay=='y')
 		{
 			cout<<"\nMoney $"<<money;
+			
+			pot=0; 
 			
 			pnl=money; 
 			dealer=0; 
@@ -275,7 +415,12 @@ void poker:: play()
 			get_o_hand(); 
 			get_o_hand(); 
 			stand=false; 
+			show_ohand(); 
 			show_hand(); 
+			
+			bust=false;
+			obust=false;
+			
 			
 			//finish my hand 
 			
@@ -295,30 +440,42 @@ void poker:: play()
 				get_oscore(ohand); 
 			}
 			
+			cout<<"******SCORE******\n";
+			cout<<"Your Score: "<<score;
+			cout<<"\nDealer score: "<<oscore;
+			
+			cout<<"\n";
 			if(bust && obust) 
 			{
+				cout<<"Both Busted, split\n";
 				money+=pot/2;
-				dealer=pot/2; 
+				dealer+=pot/2; 
 				
 			}
 			else if(bust)
 			{
-				dealer=pot; 
+				cout<<"You Busted\n"; 
+				dealer+=pot; 
 			}
 			else if(obust)
 			{
+				cout<<"Dealer Busted\n"; 
 				money+=pot; 
 			} 
 			else if(score>oscore) 
 			{
+				cout<<"You won\n";
+				
 				money+=pot; 
 			}
 			else if(oscore>score)
 			{
-				dealer=pot; 
+				cout<<"Dealer Won\n";
+				dealer+=pot; 
 			}
 			else if(score==oscore)
 			{
+				cout<<"Even score, Split Pot\n"; 
 				money+=pot/2; 
 				dealer+=pot/2; 
 			}
@@ -329,7 +486,7 @@ void poker:: play()
 			
 			
 			cout<<"\nYour Winnings: $"<<money-pnl;
-			cout<<"\nDealer Winnings: $"<<Dealer;
+			cout<<"\nDealer Winnings: $"<<dealer;
 			
 			
 		}
@@ -341,7 +498,7 @@ void poker:: play()
 		}
 	}
 	
-	cout<<"Cash in Amount: $"<<CashinAmount; 
+	cout<<"\n***BLACKJACK RESULTS***\n\nCash in Amount: $"<<CashinAmount; 
 	cout<<"\nExit with $"<<money;
 	cout<<"\nProfit $"<<money-CashinAmount; 
 	
