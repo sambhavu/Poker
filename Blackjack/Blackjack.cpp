@@ -92,7 +92,8 @@ void poker:: show_ohand()
 void poker::bet()
 {
 	int amount;
-	cout<<"Enter Bet Amount $\n:";
+	cout<<"Money: $"<<money<<"\n";
+	cout<<"Enter Bet Amount: $";
 	cin>> amount; 
 	int enoughmoney=1;
 	
@@ -108,9 +109,10 @@ void poker::bet()
 		 }
 	 } 
 	 
+	 
 	 bet_amount=amount; 
 	 money=money-amount;
-	 pot=pot+amount;
+	 pot=pot+amount+amount;
 	
 }
 
@@ -347,9 +349,8 @@ stand=false;
 			    value+=11; 
 			} 
 		}
-		
-	cout<<"]\n"; 
 	} 
+	cout<<"]\n";
 	
 	if(value>21)
 	{
@@ -366,7 +367,7 @@ stand=false;
 		stand=true; 
 	}
 		
-	if(value>17)
+	if(value>=17)
 	{
 		cout<<"Dealer is Done\n"; 
 		stand=true;
@@ -406,8 +407,11 @@ void poker:: play()
 			cout<<"\nMoney $"<<money;
 			
 			pot=0; 
+			dealer=0;
+			
 			
 			pnl=money; 
+			
 			dealer=0; 
 			reset_deck(); 
 			get_hand(); 
@@ -460,13 +464,13 @@ void poker:: play()
 			else if(obust)
 			{
 				cout<<"Dealer Busted\n"; 
-				money+=pot; 
+				money=money+pot; 
 			} 
 			else if(score>oscore) 
 			{
 				cout<<"You won\n";
 				
-				money+=pot; 
+				money=money+pot; 
 			}
 			else if(oscore>score)
 			{
@@ -533,6 +537,7 @@ void poker::reset_deck(){
 	
 	deck.clear();
 	hand.clear();
+	ohand.clear(); 
 	dealt_cards.clear();
 	table.clear(); 
 	
