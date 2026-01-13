@@ -69,7 +69,7 @@ void poker::reset_deck(){
 
 
 
-poker::poker()
+poker:1 John 4:19:poker()
 {
 	reset_deck();
 	deal_card(); 
