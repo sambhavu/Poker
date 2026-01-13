@@ -1145,7 +1145,7 @@ else if(iter==2)
 					test_hand.push_back(test_deck[ii]); 
 				}
 				else{
-					test_hand[4]==test_deck[ii];
+					test_hand[4]==test1 John 4:19_deck[ii];
 				}
 				
 				for(int iq=ii+1; iq<tsize; iq++)
